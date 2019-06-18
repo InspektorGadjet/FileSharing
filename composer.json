@@ -1,0 +1,31 @@
+{
+    
+	"name": 
+	"inspektor_gadjet/uppu.ru",
+    
+	"type": "project",
+    
+	"license": "proprietary",
+    
+	"authors": [
+        
+		{
+            
+			"name": "Kirill Grischenkov",
+           
+ 			"email": "spbkirill@gmail.com"
+        
+		}
+    
+	],
+   
+	"autoload": {
+        "psr-4": {
+            "Project\\": "src/public/"
+        }
+    },
+	"require": {
+		"slim/slim": "^3.12"
+	}
+
+}
