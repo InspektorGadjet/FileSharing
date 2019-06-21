@@ -1,7 +1,10 @@
 <?php
+
+
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+try{
 require __DIR__ . '/vendor/autoload.php';
 
 $configuration = [
@@ -29,6 +32,7 @@ $container['view'] = function ($container) {
 
 	return $view;
 };
+$container['upload_directory'] = __DIR__ . '\uploads';
 
 $app->get('/', function (Request $request, Response $response, array $args) use ($app) {
 
@@ -36,15 +40,28 @@ $app->get('/', function (Request $request, Response $response, array $args) use 
 
 })->setName('home');
 
-$app->post('/upload', function (Request $request, Response $response, array $args) {
-	$files = $request->getUploadedFiles();
-    if (empty($files['newfile'])) {
-        throw new Exception('Expected a newfile');
-    }
- 
-    $newfile = $files['newfile'];
+$app->post('/upload', function (Request $request, Response $response, array $args) use ($app) {
 
-    var_dump($newfile);
+	$directory = $this->get('upload_directory');
+
+	$files = $request->getUploadedFiles();
+
+    if (empty($files['newfile'])) {
+        throw new \Project\Exceptions\NoFileException('Expected a newfile');
+    }
+
+ 	
+    $newfile = $files['newfile'];
+    
+    $o = new \Project\Controllers\MainController($newfile, $app, $directory);
+    $o->main();
+
 });
 
+
+
+
 $app->run();
+} catch (\Project\Exceptions\NoFileException $e) {
+	echo $e->getMessage();
+}
