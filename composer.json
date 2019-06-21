@@ -21,11 +21,13 @@
    
 	"autoload": {
         "psr-4": {
-            "Project\\": "src/public/"
+            "Project\\": "src/Project/"
         }
     },
 	"require": {
-		"slim/slim": "^3.12"
+		"slim/slim": "^3.12",
+		"twig/twig": "1.*",
+		"slim/twig-view": "^2.5"
 	}
 
 }
