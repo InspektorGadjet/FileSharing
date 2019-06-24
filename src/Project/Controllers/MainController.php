@@ -7,7 +7,7 @@ class MainController
 	private $file;
 	private $directory;
 
-	public function __construct(\Slim\Http\UploadedFile $newfile, $directory)
+	public function __construct(\Slim\Http\UploadedFile $newfile, string $directory)
 	{
 		$this->file = $newfile;
 		$this->directory = $directory;
@@ -19,12 +19,15 @@ class MainController
 		$fileManager = new \Project\Models\FileManager();
 		$server_name = $fileManager->makeServerFileName();
 		$fileManager->moveUploadedFile($this->directory, $this->file, $server_name);
+
 		$info = $fileManager->getInfoAboutFile($this->directory, $server_name);
 
 		$fileParameters['real_name'] = $fileManager->getRealFileName($this->file);
 		$fileParameters['server_name'] = $server_name;
 		$fileParameters['mime_type'] = $info['mime_type'];
 		$file = new \Project\Models\File($fileParameters);
+		$fileRecorder->addFile($file);
+
 		return $file;
 	}
 }

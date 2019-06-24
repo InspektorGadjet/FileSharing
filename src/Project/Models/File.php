@@ -21,6 +21,11 @@ class File
 	{
 		return $this->real_name;
 	}
+
+	public function getServerName()
+	{
+		return $this->server_name;
+	}
 	
 	public function getMimeType()
 	{

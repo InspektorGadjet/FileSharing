@@ -18,13 +18,13 @@ class FileManager
 		return $server_name;
 	}
 
-	public function moveUploadedFile(string $directory, $file, $server_name)
+	public function moveUploadedFile(string $directory, $file, string $server_name)
 	{
 	    $file->moveTo($directory . DIRECTORY_SEPARATOR . $server_name);
     	#var_dump($getid3->info);
 	}
 
-	public function getInfoAboutFile(string $directory, $server_name)
+	public function getInfoAboutFile(string $directory, string $server_name)
 	{
 		$getid3 = new \getID3();
 		$getid3->encoding = 'UTF-8';

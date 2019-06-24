@@ -42,9 +42,7 @@ $container['db'] = function ($c) {
 };
 
 $app->get('/', function (Request $request, Response $response, array $args) {
-
 	$this->view->render($response, 'homepage.php');
-
 })->setName('home');
 
 $app->post('/upload', function (Request $request, Response $response, array $args) {
@@ -64,9 +62,24 @@ $app->post('/upload', function (Request $request, Response $response, array $arg
     $file = $controller->main($pdo);
     $this->view->render($response, 'upload_page.php', [
     	'file_name' => $file->getName(),
+    	'server_name'=> $file->getServerName(),
     	'mime_type' => $file->getMimeType()
-]);
+	]);
+});
 
+$app->get('/download/{filename}', function (Request $request, Response $response, array $args) {
+	$directory = $this->get('upload_directory');
+	$pdo = $this->get('db');
+	$controller = new Project\Controllers\DownloadController($args['filename'], $directory, $pdo);
+	$controller->main();
+});
+
+$app->get('/files', function (Request $request, Response $response, array $args) {
+	$pdo = $this->get('db');
+	$controller = new Project\Controllers\ListController($pdo);
+	$fileList = $controller->fileList();
+	var_dump($fileList);
+	$this->view->render($response, 'file_list.php', ['fileList' => $fileList]);
 });
 
 $app->run();
