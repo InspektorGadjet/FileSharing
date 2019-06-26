@@ -52,19 +52,21 @@ $app->post('/upload', function (Request $request, Response $response, array $arg
 
     if (empty($files['newfile']->file)) {
         header("Location: /");
-        exit();
+        exit;
     }
     
+    //Файл для загрузки на сервер
     $newfile = $files['newfile'];
     
     #var_dump($newfile->file);
     $controller = new \Project\Controllers\MainController($newfile, $directory);
-    $file = $controller->main($pdo);
-    $this->view->render($response, 'upload_page.php', [
+    $controller->main($pdo);
+    exit;
+    /*$this->view->render($response, 'upload_page.php', [
     	'file_name' => $file->getName(),
     	'server_name'=> $file->getServerName(),
     	'mime_type' => $file->getMimeType()
-	]);
+	]);*/
 });
 
 $app->get('/download/{filename}', function (Request $request, Response $response, array $args) {
@@ -78,8 +80,12 @@ $app->get('/files', function (Request $request, Response $response, array $args)
 	$pdo = $this->get('db');
 	$controller = new Project\Controllers\ListController($pdo);
 	$fileList = $controller->fileList();
-	var_dump($fileList);
+	#var_dump($fileList);
 	$this->view->render($response, 'file_list.php', ['fileList' => $fileList]);
+});
+
+$app->get('/view/{filename}', function (Request $request, Response $response, array $args) {
+
 });
 
 $app->run();

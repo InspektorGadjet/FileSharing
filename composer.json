@@ -28,7 +28,8 @@
 		"slim/slim": "^3.12",
 		"twig/twig": "1.*",
 		"slim/twig-view": "^2.5",
-		"james-heinrich/getid3": "^1.9"
+		"james-heinrich/getid3": "^1.9",
+		"twbs/bootstrap": "^4.3"
 	}
 
 }

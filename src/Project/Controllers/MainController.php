@@ -18,8 +18,9 @@ class MainController
 		$fileRecorder = new \Project\Models\FilesDataGateway($pdo);
 		$fileManager = new \Project\Models\FileManager();
 		$server_name = $fileManager->makeServerFileName();
+		//Загрузка файла на сервер
 		$fileManager->moveUploadedFile($this->directory, $this->file, $server_name);
-
+		//Использование библиотеки getID3 для получения данных о файле
 		$info = $fileManager->getInfoAboutFile($this->directory, $server_name);
 
 		$fileParameters['real_name'] = $fileManager->getRealFileName($this->file);
@@ -27,7 +28,7 @@ class MainController
 		$fileParameters['mime_type'] = $info['mime_type'];
 		$file = new \Project\Models\File($fileParameters);
 		$fileRecorder->addFile($file);
-
-		return $file;
+		
+		header('Location: /files');
 	}
 }

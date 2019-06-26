@@ -17,7 +17,9 @@ class DownloadController
 
 	public function main()
 	{
+		// filename - имя файла на сервере, realname - настоящее имя файла
+		$realFileName = $this->filesDataGateway->getFileName($this->filename);
 		$downloader = new \Project\Models\Downloader();
-		$downloader->downloadFile($this->filename, $this->directory);
+		$downloader->downloadFile($this->filename, $this->directory, $realFileName);
 	}
 }
