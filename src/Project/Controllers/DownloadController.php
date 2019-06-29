@@ -15,11 +15,13 @@ class DownloadController
 		$this->filesDataGateway = new \Project\Models\FilesDataGateway($pdo);
 	}
 
-	public function main()
+	public function download($filename)
 	{
 		// filename - имя файла на сервере, realname - настоящее имя файла
+		
 		$realFileName = $this->filesDataGateway->getFileName($this->filename);
 		$downloader = new \Project\Models\Downloader();
 		$downloader->downloadFile($this->filename, $this->directory, $realFileName);
+
 	}
 }

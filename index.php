@@ -31,6 +31,7 @@ $container['view'] = function ($container) {
 	return $view;
 };
 $container['upload_directory'] = __DIR__ . '\uploads';
+$container['copy_directory'] = __DIR__ . '\copyes';
 $container['db'] = function ($c) {
 	$db = $c['settings']['db'];
 	$pdo = new \PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass'], array(
@@ -46,6 +47,7 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 })->setName('home');
 
 $app->post('/upload', function (Request $request, Response $response, array $args) {
+	$copy_directory = $this->get('copy_directory');
 	$directory = $this->get('upload_directory');
 	$pdo = $this->get('db');
 	$files = $request->getUploadedFiles();
@@ -57,9 +59,11 @@ $app->post('/upload', function (Request $request, Response $response, array $arg
     
     //Файл для загрузки на сервер
     $newfile = $files['newfile'];
+
     
-    #var_dump($newfile->file);
-    $controller = new \Project\Controllers\MainController($newfile, $directory);
+    
+
+    $controller = new \Project\Controllers\MainController($newfile, $directory, $copy_directory);
     $controller->main($pdo);
     exit;
     /*$this->view->render($response, 'upload_page.php', [
@@ -73,18 +77,22 @@ $app->get('/download/{filename}', function (Request $request, Response $response
 	$directory = $this->get('upload_directory');
 	$pdo = $this->get('db');
 	$controller = new Project\Controllers\DownloadController($args['filename'], $directory, $pdo);
-	$controller->main();
+	$controller->download($args['filename']);
 });
 
 $app->get('/files', function (Request $request, Response $response, array $args) {
 	$pdo = $this->get('db');
 	$controller = new Project\Controllers\ListController($pdo);
 	$fileList = $controller->fileList();
-	#var_dump($fileList);
 	$this->view->render($response, 'file_list.php', ['fileList' => $fileList]);
 });
 
 $app->get('/view/{filename}', function (Request $request, Response $response, array $args) {
+	$pdo = $this->get('db');
+	$directory = $this->get('upload_directory');
+	$controller = new \Project\Controllers\ViewController($pdo);
+	$info = $controller->view($directory, $args['filename']);
+	$this->view->render($response, 'file_info.php', ['info' => $info]);
 
 });
 
