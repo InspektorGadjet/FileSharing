@@ -4,7 +4,7 @@ namespace Project\Models;
 
 class FileManager
 {	
-	public function makeServerFileName()
+	public function makeServerFileName(): string
 	{
 		$server_name = bin2hex(random_bytes(8));
 		$server_name = sprintf('%s.%0.8s', $server_name, 'txt');
@@ -36,14 +36,15 @@ class FileManager
 		return round($file_size, 0) . " " . $units[$position];
 	}
 
-	public function getRealFileName(\Slim\Http\UploadedFile $file)
+	public function getRealFileName(\Slim\Http\UploadedFile $file): string
 	{
 		$real_name = $file->getClientFilename();
 		$real_name = pathinfo($real_name);
 		return $real_name['basename'];
 	}
 
-	public function showDate($date)
+	//Возвращает прошедшее время с создания файла
+	public function showDate(string $date): string
 	{
 		if(!ctype_digit($date))
         $date = strtotime($date);
@@ -81,15 +82,15 @@ class FileManager
 	        	return ceil($day_diff / 7) . ' недель назад';
 	        }
 	        if($day_diff < 60) {
-	        	return 'last month';
+	        	return 'в прошлом месяце';
 	        }
 	        return date('F Y', $date);
 	    }
 	}
 
 	public function resize(
-		$source_path, 
-	    $destination_path, 
+		string $source_path, 
+	    string $destination_path, 
 	    $newwidth,
 	    $newheight = FALSE, 
 	    $quality = FALSE
@@ -113,15 +114,17 @@ class FileManager
     		$newwidth = round($newheight * $oldwidth/$oldheight); 
     	}
     	$destination_resource = imagecreatetruecolor($newwidth,$newheight);
+
     	imagecopyresampled($destination_resource, $src_resource, 0, 0, 0, 0, $newwidth, $newheight, $oldwidth, $oldheight);
 
     	if ($type = 2) { # jpeg
-        imageinterlace($destination_resource, 1); // чересстрочное формирование изображение
+        imageinterlace($destination_resource, 1);
         imagejpeg($destination_resource, $destination_path, $quality);      
-    	} else { # gif, png
+    	} else { # png
         $function = "image$typestr";
         $function($destination_resource, $destination_path);
     	}
+
 
     	imagedestroy($destination_resource);
     	imagedestroy($src_resource); 

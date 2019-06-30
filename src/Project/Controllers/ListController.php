@@ -5,21 +5,20 @@ namespace Project\Controllers;
 class ListController
 {
 	private $filesDataGateway;
+	private $fileManager;
 
 	public function __construct(\PDO $pdo)
 	{
 		$this->filesDataGateway = new \Project\Models\FilesDataGateway($pdo);
+		$this->fileManager = new \Project\Models\FileManager();
 	}
 
-	public function fileList()
+	public function fileList(): array
 	{
-		$fileList = $this->filesDataGateway->getFiles();
+		$fileList = $this->filesDataGateway->getList();
 		foreach ($fileList as $file) {
-			if (mb_strlen($file->real_name) > 15) {
-				#$file->real_name = mb_substr($file->real_name, 4);
-				echo $file->real_name;
-				echo '<br>';
-			}
+			$file->created_at = $this->fileManager->showDate($file->created_at);
+
 		}
 		
 		return $fileList;

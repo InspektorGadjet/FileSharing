@@ -8,7 +8,7 @@
 <body>
 <header>
 	<h1>File Share</h1>
-    <nav><a href="/">Главная</a> <a href="/files">Файлы</a>  <a>Third Link</a></nav>
+    <nav><a href="/">Главная</a> <a href="/files">Файлы</a></nav>
 </header>
 {% block content %}{% endblock %}
 </body>

@@ -15,7 +15,7 @@ class DownloadController
 		$this->filesDataGateway = new \Project\Models\FilesDataGateway($pdo);
 	}
 
-	public function download($filename)
+	public function download(string $filename): void
 	{
 		// filename - имя файла на сервере, realname - настоящее имя файла
 		

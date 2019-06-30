@@ -59,10 +59,6 @@ $app->post('/upload', function (Request $request, Response $response, array $arg
     
     //Файл для загрузки на сервер
     $newfile = $files['newfile'];
-
-    
-    
-
     $controller = new \Project\Controllers\MainController($newfile, $directory, $copy_directory);
     $controller->main($pdo);
     exit;
@@ -87,12 +83,16 @@ $app->get('/files', function (Request $request, Response $response, array $args)
 	$this->view->render($response, 'file_list.php', ['fileList' => $fileList]);
 });
 
-$app->get('/view/{filename}', function (Request $request, Response $response, array $args) {
+$app->map(['GET', 'POST'], '/view/{filename}', function (Request $request, Response $response, array $args) {
 	$pdo = $this->get('db');
 	$directory = $this->get('upload_directory');
+	$comment = $request->getParsedBody()['text'];
 	$controller = new \Project\Controllers\ViewController($pdo);
-	$info = $controller->view($directory, $args['filename']);
-	$this->view->render($response, 'file_info.php', ['info' => $info]);
+	$info = $controller->view($directory, $args['filename'], $comment);
+	
+	
+	var_dump($comment);
+	$this->view->render($response, 'file_info.php', ['info' => $info, 'comment' => $comment]);
 
 });
 
