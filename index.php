@@ -87,11 +87,12 @@ $app->map(['GET', 'POST'], '/view/{filename}', function (Request $request, Respo
 	$pdo = $this->get('db');
 	$directory = $this->get('upload_directory');
 	$comment = $request->getParsedBody()['text'];
+	if (empty($comment)) {
+		$comment = '';
+	}
 	$controller = new \Project\Controllers\ViewController($pdo);
 	$info = $controller->view($directory, $args['filename'], $comment);
-	
-	
-	var_dump($comment);
+
 	$this->view->render($response, 'file_info.php', ['info' => $info, 'comment' => $comment]);
 
 });

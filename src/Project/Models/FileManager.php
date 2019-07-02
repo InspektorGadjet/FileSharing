@@ -125,8 +125,18 @@ class FileManager
         $function($destination_resource, $destination_path);
     	}
 
-
     	imagedestroy($destination_resource);
     	imagedestroy($src_resource); 
+	}
+
+	public function createToken()
+	{
+		$max = 0;
+		do {
+			$token = bin2hex(random_bytes(32));
+			$max ++;
+		} while($max < 5);
+
+		return $token;
 	}
 }

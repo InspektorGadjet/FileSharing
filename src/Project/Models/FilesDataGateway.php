@@ -11,16 +11,27 @@ class FilesDataGateway
 		$this->pdo = $pdo;
 	}
 
-	public function addFile(\Project\Models\File $file)
+	public function addFile(\Project\Models\File $file, string $token)
 	{
-		$stmt = $this->pdo->prepare("INSERT INTO `files` (`real_name`, `server_name`, `format`, `size`, `extension`) VALUES (:real_name, :server_name, :format, :size, :extension)");
+		$stmt = $this->pdo->prepare("INSERT INTO `files` (`real_name`, `server_name`, `format`, `size`, `extension`, `token`, `author_comment`) VALUES (:real_name, :server_name, :format, :size, :extension, :token, :author_comment)");
 		$stmt->bindValue(':real_name', $file->getName());
 		$stmt->bindValue(':server_name', $file->getServerName());
 		$stmt->bindValue(':format', $file->getMimeType());
 		$stmt->bindValue(':size', $file->getSize());
 		$stmt->bindValue(':extension', $file->getExtension());
+		$stmt->bindValue(':token', $token);
+		$stmt->bindValue(':author_comment', '');
 		$stmt->execute();
 		return;
+	}
+
+	public function checkAuthor(string $token, string $server_name)
+	{
+		$stmt = $this->pdo->prepare("SELECT `token` FROM `files` WHERE token = :token AND server_name = :server_name");
+		$stmt->bindValue(':token', $token);
+		$stmt->bindValue(':server_name', $server_name);
+		$stmt->execute();
+		return (bool)$stmt->fetchcolumn();
 	}
 
 	public function getFileByName(string $filename)
@@ -29,6 +40,23 @@ class FilesDataGateway
 		$stmt->bindValue(':server_name', $filename);
 		$stmt->execute();
 		return $stmt->fetch();
+	}
+
+	public function getFileComment(string $filename)
+	{
+		$stmt = $this->pdo->prepare("SELECT author_comment FROM `files` WHERE `server_name` = :server_name");
+		$stmt->bindValue(':server_name', $filename);
+		$stmt->execute();
+		return $stmt->fetchcolumn();
+	}
+
+	public function updateComment(string $server_name, string $author_comment)
+	{
+		$stmt = $this->pdo->prepare("UPDATE `files` SET author_comment = :author_comment WHERE server_name = :server_name");
+		$stmt->bindValue(':author_comment', $author_comment);
+		$stmt->bindValue(':server_name', $server_name);
+		$stmt->execute();
+		return;
 	}
 
 	public function getFileName(string $server_name): string

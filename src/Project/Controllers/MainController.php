@@ -43,8 +43,16 @@ class MainController
 		$fileParameters['extension'] = $info['fileformat'];
 		
 		$file = new \Project\Models\File($fileParameters);
-		$fileRecorder->addFile($file);
+
+		if(empty($_COOKIE)){
+			$token = $fileManager->createToken();
+			setcookie('token', $token, strtotime('+10 years'), null, null, null, true);
+		} else {
+			$token = $_COOKIE['token'];
+		}
 		
+		$fileRecorder->addFile($file, $token);
+
 		header('Location: /view/' . $server_name);
 	}
 }
