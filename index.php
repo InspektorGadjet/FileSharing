@@ -17,6 +17,7 @@ $configuration = [
 		],
 	],
 ];
+
 $c = new \Slim\Container($configuration);
 
 $app = new \Slim\App($c);
@@ -95,6 +96,16 @@ $app->map(['GET', 'POST'], '/view/{filename}', function (Request $request, Respo
 
 	$this->view->render($response, 'file_info.php', ['info' => $info, 'comment' => $comment]);
 
+});
+
+$app->get('/delete/{filename}', function (Request $request, Response $response, array $args) {
+	$pdo = $this->get('db');
+	$copy_directory = $this->get('copy_directory');
+	$directory = $this->get('upload_directory');
+	$controller = new Project\Controllers\DeleteController($pdo);
+	$controller->delete($args['filename'], $directory, $copy_directory);
+	header("Location: /files");
+	exit();
 });
 
 $app->run();

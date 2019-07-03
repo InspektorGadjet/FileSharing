@@ -2,7 +2,7 @@
 
 namespace Project\Controllers;
 
-class ViewController
+class ViewController implements \Project\Interfaces\CheckCookie
 {
 	private $fileManager;
 
@@ -18,11 +18,7 @@ class ViewController
 
 		$date = $this->fileManager->showDate($file->created_at);
 
-		if (empty($_COOKIE['token'])) {
-			$token = '';
-		} else {
-			$token = $_COOKIE['token'];
-		}
+		
 
 		if($comment != $this->filesDataGateway->getFileComment($filename) && !empty($comment)) {
 			$this->filesDataGateway->updateComment($file->server_name, $comment);
@@ -34,9 +30,20 @@ class ViewController
 		$info['date'] = $date;
 		$info['extension'] = $file->extension;
 		$info['copy'] = pathinfo($filename, PATHINFO_FILENAME). '.' . $file->extension;
-		$info['author'] = $this->filesDataGateway->checkAuthor($token, $file->server_name);
+		$info['author'] = $this->filesDataGateway->checkAuthor($this->checkCookie(), $file->server_name);
 		$info['comment'] = $this->filesDataGateway->getFileComment($file->server_name);
 		
 		return $info;
+	}
+
+	public function checkCookie()
+	{
+		if (empty($_COOKIE['token'])) {
+			$token = '';
+		} else {
+			$token = $_COOKIE['token'];
+		}
+
+		return $token;
 	}
 }

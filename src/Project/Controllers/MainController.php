@@ -33,7 +33,7 @@ class MainController
 			$source_path = $this->directory . DIRECTORY_SEPARATOR . $server_name;
 			
 			//Функция, создающаяя уменьшенную копию изображения
-			$fileManager->resize($source_path, $copy_path, '', 600, 100);
+			$fileManager->resize($source_path, $copy_path, '', 600, 25);
 		}
 
 		$fileParameters['real_name'] = $file_name;

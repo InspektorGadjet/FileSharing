@@ -25,6 +25,14 @@ class FilesDataGateway
 		return;
 	}
 
+	public function deleteFile(string $server_name)
+	{
+		$stmt = $this->pdo->prepare("DELETE FROM `files` WHERE server_name = :server_name");
+		$stmt->bindValue(':server_name', $server_name);
+		$stmt->execute();
+		return;
+	}
+
 	public function checkAuthor(string $token, string $server_name)
 	{
 		$stmt = $this->pdo->prepare("SELECT `token` FROM `files` WHERE token = :token AND server_name = :server_name");
@@ -69,7 +77,8 @@ class FilesDataGateway
 
 	public function getList(): array
 	{
-		$stmt = $this->pdo->prepare("SELECT real_name, server_name, format, created_at, size FROM `files` ORDER BY `created_at` DESC");
+		$stmt = $this->pdo->prepare("SELECT real_name, server_name, format, created_at, size FROM `files` ORDER BY `created_at` DESC LIMIT 100");
+		#$stmt->bindValue(':max_files', $max_files);
 		$stmt->execute();
 		return $stmt->fetchAll();
 	}

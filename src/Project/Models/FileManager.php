@@ -139,4 +139,11 @@ class FileManager
 
 		return $token;
 	}
+
+	public function deleteFile($file, string $directory, string $copy_directory)
+	{
+		unlink($directory . DIRECTORY_SEPARATOR . $file->server_name);
+		unlink($copy_directory . DIRECTORY_SEPARATOR . pathinfo($file->server_name, PATHINFO_FILENAME) . '.' . $file->extension);
+		return;
+	}
 }
