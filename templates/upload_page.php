@@ -6,5 +6,5 @@
 		<h1>Тип файла</h1>
 		<h2>{{ mime_type }}</h2>
 	</div>
-	<a class="col-md-1" href="download/{{ server_name }}">Загрузить</a>
+	<a class="col-md-1" href="download/{{ serverName }}">Загрузить</a>
 {% endblock %}

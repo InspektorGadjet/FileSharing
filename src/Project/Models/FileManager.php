@@ -6,41 +6,41 @@ class FileManager
 {	
 	public function makeServerFileName(): string
 	{
-		$server_name = bin2hex(random_bytes(8));
-		$server_name = sprintf('%s.%0.8s', $server_name, 'txt');
-		return $server_name;
+		$serverName = bin2hex(random_bytes(8));
+		$serverName = sprintf('%s.%0.8s', $serverName, 'txt');
+		return $serverName;
 	}
 
-	public function moveUploadedFile(string $directory, $file, string $server_name)
+	public function moveUploadedFile(string $directory, $file, string $serverName)
 	{
-	   $file->moveTo($directory . DIRECTORY_SEPARATOR . $server_name);
+	   $file->moveTo($directory . DIRECTORY_SEPARATOR . $serverName);
 	}
 
-	public function getInfoAboutFile(string $directory, string $server_name): array
+	public function getInfoAboutFile(string $directory, string $serverName): array
 	{
 		$getid3 = new \getID3();
 		$getid3->encoding = 'UTF-8';
-		$getid3->Analyze($directory . DIRECTORY_SEPARATOR . $server_name);
+		$getid3->Analyze($directory . DIRECTORY_SEPARATOR . $serverName);
 		return $getid3->info;
 	}
 
-	public function getFileSize(int $file_size): string
+	public function getFileSize(int $fileSize): string
 	{
 		$units = array("B", "KB", "MB", "GB", "TB", "PB");
 		$position = 0;
-		while($file_size >= 1024) {
-			$file_size /= 1024;
+		while($fileSize >= 1024) {
+			$fileSize /= 1024;
 			$position ++;
 		}
 
-		return round($file_size, 0) . " " . $units[$position];
+		return round($fileSize, 0) . " " . $units[$position];
 	}
 
 	public function getRealFileName(\Slim\Http\UploadedFile $file): string
 	{
-		$real_name = $file->getClientFilename();
-		$real_name = pathinfo($real_name);
-		return $real_name['basename'];
+		$realName = $file->getClientFilename();
+		$realName = pathinfo($realName);
+		return $realName['basename'];
 	}
 
 	//Возвращает прошедшее время с создания файла
@@ -53,8 +53,8 @@ class FileManager
 	    if($diff == 0) {
 	        return 'только что';
 	    } elseif($diff > 0) {
-	        $day_diff = floor($diff / 86400);
-	        if($day_diff == 0)
+	        $dayDiff = floor($diff / 86400);
+	        if($dayDiff == 0)
 	        {
 	            if($diff < 60) {
 	            	return 'только что';
@@ -72,16 +72,16 @@ class FileManager
 	            	return floor($diff / 3600) . ' часов назад';
 	            }
 	        }
-	        if($day_diff == 1) {
+	        if($dayDiff == 1) {
 	        	return 'Вчера';
 	        }
-	        if($day_diff < 7) {
-	        	return $day_diff . ' дней назад';
+	        if($dayDiff < 7) {
+	        	return $dayDiff . ' дней назад';
 	        }
 	        if($day_diff < 31) {
-	        	return ceil($day_diff / 7) . ' недель назад';
+	        	return ceil($dayDiff / 7) . ' недель назад';
 	        }
-	        if($day_diff < 60) {
+	        if($dayDiff < 60) {
 	        	return 'в прошлом месяце';
 	        }
 	        return date('F Y', $date);
@@ -89,15 +89,15 @@ class FileManager
 	}
 
 	public function resize(
-		string $source_path, 
-	    string $destination_path, 
+		string $sourcePath, 
+	    string $destinationPath, 
 	    $newwidth,
 	    $newheight = FALSE, 
 	    $quality = FALSE
 	)
 	{
 		ini_set("gd.jpeg_ignore_warning", 1);
-		list($oldwidth, $oldheight, $type) = getimagesize($source_path);
+		list($oldwidth, $oldheight, $type) = getimagesize($sourcePath);
 
 		switch ($type) {
         case IMAGETYPE_JPEG: $typestr = 'jpeg'; break;
@@ -106,27 +106,27 @@ class FileManager
     	}
 
     	$function = "imagecreatefrom$typestr";
-    	$src_resource = $function($source_path);
+    	$srcResource = $function($sourcePath);
 
     	if (!$newheight) { 
     		$newheight = round($newwidth * $oldheight/$oldwidth); 
     	}  elseif (!$newwidth) { 
     		$newwidth = round($newheight * $oldwidth/$oldheight); 
     	}
-    	$destination_resource = imagecreatetruecolor($newwidth,$newheight);
+    	$destinationResource = imagecreatetruecolor($newwidth,$newheight);
 
-    	imagecopyresampled($destination_resource, $src_resource, 0, 0, 0, 0, $newwidth, $newheight, $oldwidth, $oldheight);
+    	imagecopyresampled($destinationResource, $srcResource, 0, 0, 0, 0, $newwidth, $newheight, $oldwidth, $oldheight);
 
     	if ($type = 2) { # jpeg
-        imageinterlace($destination_resource, 1);
-        imagejpeg($destination_resource, $destination_path, $quality);      
+        imageinterlace($destinationResource, 1);
+        imagejpeg($destinationResource, $destinationPath, $quality);      
     	} else { # png
         $function = "image$typestr";
-        $function($destination_resource, $destination_path);
+        $function($destinationResource, $destinationPath);
     	}
 
-    	imagedestroy($destination_resource);
-    	imagedestroy($src_resource); 
+    	imagedestroy($destinationResource);
+    	imagedestroy($srcResource); 
 	}
 
 	public function createToken()
@@ -140,10 +140,10 @@ class FileManager
 		return $token;
 	}
 
-	public function deleteFile($file, string $directory, string $copy_directory)
+	public function deleteFile($file, string $directory, string $copyDirectory)
 	{
-		unlink($directory . DIRECTORY_SEPARATOR . $file->server_name);
-		unlink($copy_directory . DIRECTORY_SEPARATOR . pathinfo($file->server_name, PATHINFO_FILENAME) . '.' . $file->extension);
+		unlink($directory . DIRECTORY_SEPARATOR . $file->serverName);
+		unlink($copyDirectory . DIRECTORY_SEPARATOR . pathinfo($file->serverName, PATHINFO_FILENAME) . '.' . $file->extension);
 		return;
 	}
 }

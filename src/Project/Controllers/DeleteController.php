@@ -13,11 +13,11 @@ class DeleteController
 		$this->filesDataGateway = new \Project\Models\FilesDataGateway($pdo);
 	}
 
-	public function delete(string $filename, string $directory, string $copy_directory)
+	public function delete(string $filename, string $directory, string $copyDirectory)
 	{
 		$file = $this->filesDataGateway->getFileByName($filename);
-		$this->filesDataGateway->deleteFile($file->server_name);
-		$this->fileManager->deleteFile($file, $directory, $copy_directory);
+		$this->filesDataGateway->deleteFile($file->serverName);
+		$this->fileManager->deleteFile($file, $directory, $copyDirectory);
 		
 		return;
 	}

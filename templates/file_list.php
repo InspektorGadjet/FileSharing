@@ -10,13 +10,13 @@
 		<div class="block">
 			<div style="margin-right: 200px; margin: auto;">
 				<label>
-					Файл: {{ item.real_name }} 
+					Файл: {{ item.realName }} 
 				</label>
-				<a class="btn" href="/view/{{ item.server_name }}">Обзор</a>
+				<a class="btn" href="/view/{{ item.serverName }}">Обзор</a>
 				<br>
-				<nav><a class="btn" href="/download/{{ item.server_name }}">Скачать</a>
+				<nav><a class="btn" href="/download/{{ item.serverName }}">Скачать</a>
 				{% if item.author == true %}
-					<a class="btn" href="/delete/{{ item.server_name }}">Удалить</a></nav>
+					<a class="btn" href="/delete/{{ item.serverName }}">Удалить</a></nav>
 				{% endif %}
 			</div>
 		</div>

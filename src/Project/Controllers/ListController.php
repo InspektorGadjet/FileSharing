@@ -19,8 +19,8 @@ class ListController implements \Project\Interfaces\CheckCookie
 		$fileList = $this->filesDataGateway->getList();
 		foreach ($fileList as $file) {
 
-			$file->created_at = $this->fileManager->showDate($file->created_at);
-			$file->author = $this->filesDataGateway->checkAuthor($this->checkCookie(), $file->server_name);
+			$file->createdAt = $this->fileManager->showDate($file->createdAt);
+			$file->author = $this->filesDataGateway->checkAuthor($this->checkCookie(), $file->serverName);
 		}
 
 		return $fileList;

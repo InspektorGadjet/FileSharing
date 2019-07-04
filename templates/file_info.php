@@ -11,7 +11,7 @@
 			<img class="file-copy" src="../copyes/{{ info.copy }}">
 		{% endif %}
 
-		<form action="/view/{{ info.server_name }}" method="post">
+		<form action="/view/{{ info.serverName }}" method="post">
 			<p><h2>Комментарий автора:</h2></p>
 			<p>
 				<textarea
@@ -29,7 +29,7 @@
 			</p>
 		</form>
 		<div class="download-link">
-			<a class="butn" href="/download/{{ info.server_name }}">Скачать</a>
+			<a class="butn" href="/download/{{ info.serverName }}">Скачать</a>
 		</div>
 	</div>
 	

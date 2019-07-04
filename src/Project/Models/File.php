@@ -4,16 +4,16 @@ namespace Project\Models;
 
 class File
 {
-	private $real_name;
-	private $server_name;
+	private $realName;
+	private $serverName;
 	private $mime_type;
 	private $size;
 	private $extension;
 
 	public function __construct(array $fileParameters)
 	{
-		$this->real_name = $fileParameters['real_name'];
-		$this->server_name = $fileParameters['server_name'];
+		$this->realName = $fileParameters['realName'];
+		$this->serverName = $fileParameters['serverName'];
 		$this->mime_type = $fileParameters['mime_type'];
 		$this->size = $fileParameters['filesize'];
 		$this->extension = $fileParameters['extension'];
@@ -22,12 +22,12 @@ class File
 
 	public function getName(): string
 	{
-		return $this->real_name;
+		return $this->realName;
 	}
 
 	public function getServerName(): string
 	{
-		return $this->server_name;
+		return $this->serverName;
 	}
 	
 	public function getMimeType(): string

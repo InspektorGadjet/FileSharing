@@ -16,22 +16,22 @@ class ViewController implements \Project\Interfaces\CheckCookie
 	{
 		$file = $this->filesDataGateway->getFileByName($filename);
 
-		$date = $this->fileManager->showDate($file->created_at);
+		$date = $this->fileManager->showDate($file->createdAt);
 
 		
 
 		if($comment != $this->filesDataGateway->getFileComment($filename) && !empty($comment)) {
-			$this->filesDataGateway->updateComment($file->server_name, $comment);
+			$this->filesDataGateway->updateComment($file->serverName, $comment);
 		}
 
-		$info['name'] = $file->real_name;
-		$info['server_name'] = $file->server_name;
+		$info['name'] = $file->realName;
+		$info['serverName'] = $file->serverName;
 		$info['filesize'] = $file->size;
 		$info['date'] = $date;
 		$info['extension'] = $file->extension;
 		$info['copy'] = pathinfo($filename, PATHINFO_FILENAME). '.' . $file->extension;
-		$info['author'] = $this->filesDataGateway->checkAuthor($this->checkCookie(), $file->server_name);
-		$info['comment'] = $this->filesDataGateway->getFileComment($file->server_name);
+		$info['author'] = $this->filesDataGateway->checkAuthor($this->checkCookie(), $file->serverName);
+		$info['comment'] = $this->filesDataGateway->getFileComment($file->serverName);
 		
 		return $info;
 	}
