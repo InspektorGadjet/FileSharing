@@ -44,7 +44,7 @@ class ViewController implements \Project\Interfaces\CheckCookie
 		$info['author'] = $this->filesDataGateway->checkAuthor($this->checkCookie(), $file->serverName);
 		$info['authorComment'] = $this->filesDataGateway->getFileComment($file->serverName);
 		$info['commentsList'] = $commentsList;
-		var_dump($info);
+		
 		return $info;
 	}
 

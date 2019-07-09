@@ -5,18 +5,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$configuration = [
-	'settings' => [
-		'displayErrorDetails' => true,
-		'addContentLengthHeader' => false,
-		'db' => [
-			'host' => 'localhost',
-			'user' => 'root',
-			'pass' => '',
-			'dbname' => 'files'
-		],
-	],
-];
+$configuration = require __DIR__ . '/src/config.php';
 
 $c = new \Slim\Container($configuration);
 
