@@ -69,7 +69,7 @@ class FileManager
 	            	return '1 час назад';
 	            }
 	            if($diff < 86400) {
-	            	return floor($diff / 3600) . ' часов назад';
+	            	return floor($diff / 3600) . ' часа назад';
 	            }
 	        }
 	        if($dayDiff == 1) {

@@ -44,7 +44,7 @@ class FilesDataGateway
 
 	public function getFileByName(string $filename)
 	{
-		$stmt = $this->pdo->prepare("SELECT realName, serverName, format, createdAt, size, extension FROM `files` WHERE `serverName` = :serverName");
+		$stmt = $this->pdo->prepare("SELECT id, realName, serverName, format, createdAt, size, extension FROM `files` WHERE `serverName` = :serverName");
 		$stmt->bindValue(':serverName', $filename);
 		$stmt->execute();
 		return $stmt->fetch();

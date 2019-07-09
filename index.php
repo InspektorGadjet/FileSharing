@@ -87,14 +87,15 @@ $app->get('/files', function (Request $request, Response $response, array $args)
 $app->map(['GET', 'POST'], '/view/{filename}', function (Request $request, Response $response, array $args) {
 	$pdo = $this->get('db');
 	$directory = $this->get('uploadDirectory');
-	$comment = $request->getParsedBody()['text'];
-	if (empty($comment)) {
-		$comment = '';
+	$authorComment = $request->getParsedBody()['text'];
+	if (empty($authorComment)) {
+		$authorComment = '';
 	}
-	$controller = new \Project\Controllers\ViewController($pdo);
-	$info = $controller->view($directory, $args['filename'], $comment);
 
-	$this->view->render($response, 'file_info.php', ['info' => $info, 'comment' => $comment]);
+	$controller = new \Project\Controllers\ViewController($pdo);
+	$info = $controller->view($directory, $args['filename'], $authorComment);
+
+	$this->view->render($response, 'file_info.php', ['info' => $info, 'comment' => $authorComment]);
 
 });
 

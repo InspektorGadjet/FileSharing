@@ -19,7 +19,7 @@
 						readonly
 					{% endif %}
 					maxlength="100" rows="5" cols="68" name="text"
-					>{{ info.comment }}</textarea>
+					>{{ info.authorComment }}</textarea>
 			</p>
 				
 			<p>
@@ -32,5 +32,23 @@
 			<a class="butn" href="/download/{{ info.serverName }}">Скачать</a>
 		</div>
 	</div>
-	
+	<div class="comment-block">
+		<form action="/view/{{ info.serverName }}" method="post" class="comment_form">
+			<h6>Оставьте комментарий:</h6>
+			<div class="messenger"></div>
+			<label>
+				<textarea name="comment" class="comment-text"></textarea>
+			</label>
+			<input type="submit" value="Отправить" name="submit">
+		</form>
+	</div>
+	<h2 style="text-align: center;">Список комметариев:</h2>
+	{% for item in info.commentsList %}
+	<div class="commets-list">
+		<div class="comment-block">
+			<h5 id="author">{{ item.author }}</h5>
+			<textarea readonly id="text">{{ item.text }}</textarea>
+		</div>
+	</div>
+	{% endfor %}
 {% endblock %}
